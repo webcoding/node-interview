@@ -33,7 +33,7 @@
 
 ***方案1***
 
-只需要等上一段时间再进行下一次 send 就好, 适用于交互频率特别低的场景. 缺点也很明显, 对于比较频繁的场景而言传输效率实在太低. 不过几乎用做什么处理.
+只需要等上一段时间再进行下一次 send 就好, 适用于交互频率特别低的场景. 缺点也很明显, 对于比较频繁的场景而言传输效率实在太低. 不过几乎不用做什么处理.
 
 ***方案2***
 
@@ -182,7 +182,7 @@ HTTP headers 是在进行 HTTP 请求的交互过程中互相支会对方一些�
 
 > <a name="q-cors"></a> 什么是跨域请求? 如何允许跨域?
 
-出于安全考虑, 默认情况下使用 XMLHttpRequest 和 Fetch 发起 HTTP 请求必须遵守同源策略, 即只能向相同域名请求. 向不同域名的请求被称作跨域请求 (cross-origin HTTP request). 可以通过设置 [CORS headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS) 即 `Access-Control-Allow-` 系列来允许跨域. 例如:
+出于安全考虑, 默认情况下使用 XMLHttpRequest 和 Fetch 发起 HTTP 请求必须遵守同源策略, 即只能向相同 host 请求 (host = hostname : port) 注[1]. 向不同 host 的请求被称作跨域请求 (cross-origin HTTP request). 可以通过设置 [CORS headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS) 即 `Access-Control-Allow-` 系列来允许跨域. 例如:
 
 ```
 location ~* ^/(?:v1|_) {
@@ -197,6 +197,8 @@ location ~* ^/(?:v1|_) {
 }
 ```
 
+注[1]：同源除了相同 host 也包括相同协议. 所以即使 host 相同, 从 HTTP 到 HTTPS 也属于跨域, 见[讨论](https://github.com/ElemeFE/node-interview/issues/55).
+
 > `Script error.` 是什么错误? 如何拿到更详细的信息?
 
 接上题, 由于同源性策略 (CORS), 如果你引用的 js 脚本所在的域与当前域不同, 那么浏览器会把 onError 中的 msg 替换为 `Script error.` 要拿到详细错误的方法, 处理配好 `Access-Control-Allow-Origin` 还有在引用脚本的时候指定 `crossorigin` 例如:
@@ -205,7 +207,7 @@ location ~* ^/(?:v1|_) {
 <script src="http://another-domain.com/app.js" crossorigin="anonymous"></script>
 ```
 
-详见 [Javascript Script Error.](https://sentry.io/answers/javascript-script-error/)
+详见 [JavaScript Script Error.](https://sentry.io/answers/javascript-script-error/)
 
 
 ### Agent
